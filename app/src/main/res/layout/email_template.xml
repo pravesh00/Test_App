@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_margin="5sp"
+    android:padding="3sp"
+    android:id="@+id/layoutEmail"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
+
+    <com.github.ivbaranov.mli.MaterialLetterIcon
+        android:id="@+id/iconLetter"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></com.github.ivbaranov.mli.MaterialLetterIcon>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:id="@+id/imgTick"
+        android:src="@drawable/img"
+        android:visibility="invisible"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:maxLength="30"
+        app:layout_constraintStart_toEndOf="@+id/iconLetter"
+        app:layout_constraintTop_toTopOf="@+id/iconLetter"
+        app:srcCompat="@drawable/ic_right_email" />
+
+    <TextView
+        android:id="@+id/txtSender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Naruto"
+        android:maxLength="20"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/iconLetter" />
+
+    <TextView
+        android:id="@+id/txtSubject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="Best Anime Ever"
+        android:maxLength="30"
+        app:layout_constraintStart_toStartOf="@+id/txtSender"
+        app:layout_constraintTop_toBottomOf="@+id/txtSender" />
+
+    <TextView
+        android:id="@+id/txtBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="Yeah You are right"
+        android:maxLength="30"
+        app:layout_constraintStart_toStartOf="@+id/txtSubject"
+        app:layout_constraintTop_toBottomOf="@+id/txtSubject" />
+
+    <TextView
+        android:id="@+id/txtEmailTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12:30 pm"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtSender" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

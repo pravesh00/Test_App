@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Login</string>
+    <string name="base_url">https://android-dev.homingos.com/</string>
+    <string name="error">Something went wrong</string>
+</resources>
