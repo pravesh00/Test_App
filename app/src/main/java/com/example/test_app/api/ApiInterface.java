@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.example.test_app.model.AllMailsResponse;
 import com.example.test_app.model.AllUserResponse;
+import com.example.test_app.model.DeleteBody;
 import com.example.test_app.model.Email;
 import com.example.test_app.model.LoginBody;
 import com.example.test_app.model.SignUpBody;
@@ -41,6 +42,9 @@ public interface ApiInterface {
 
     @DELETE("/deleteMailById?id={id}")
     Call<JsonObject> delete(@Header("x-access-token") String token, @Path("id") String id);
+
+    @DELETE("/getMailsByIds")
+    Call<JsonObject> deleteMultiple(@Header("x-access-token") String token,@Body DeleteBody deleteBody);
 
 
 

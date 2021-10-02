@@ -2,10 +2,13 @@ package com.example.test_app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,7 +24,11 @@ import com.example.test_app.adapter.EmailAdapter;
 import com.example.test_app.api.ApiInterface;
 import com.example.test_app.database.DatabaseClient;
 import com.example.test_app.model.AllMailsResponse;
+import com.example.test_app.model.DeleteBody;
 import com.example.test_app.model.Email;
+import com.example.test_app.model.Selected;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,8 +54,12 @@ public class EmailInfoActivity extends AppCompatActivity {
     EditText search;
     ArrayList<Email> permCopy=new ArrayList<>();
     ImageView sort;
-    ImageView noresult;
+    ImageView noresult,del;
     TextView txtNoRes;
+    TextInputLayout layTop;
+    boolean toggle=false;
+    boolean sortToggle=true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +73,11 @@ public class EmailInfoActivity extends AppCompatActivity {
 
         api=retrofit.create(ApiInterface.class);
 
+        dummyData();
+
         //Intializing UI
         init();
+        permCopy.addAll(emails);
 
         setDefaultListEmail();
 
@@ -107,6 +121,7 @@ public class EmailInfoActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if(!toggle)
                 filter(search.getText().toString());
             }
 
@@ -115,16 +130,89 @@ public class EmailInfoActivity extends AppCompatActivity {
         sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(sortToggle)
                 sortAlpha();
+                else{
+                    sortDate();
+                }
+                sortToggle=!sortToggle;
+            }
+        });
+
+        layTop.setStartIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(del.getVisibility()==View.VISIBLE){
+                    DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().selectedDao().deleteAll();
+                    del.setVisibility(View.INVISIBLE);
+                    layTop.setStartIconDrawable(R.drawable.ic_menu);
+                    search.setText("");
+                    update();
+                    toggle=false;
+                }
+            }
+        });
+
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(del.getVisibility()==View.VISIBLE){
+                    DeleteBody deleteBody=new DeleteBody();
+                    ArrayList<String> ids=new ArrayList<>();
+                    List<Selected> id=DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().selectedDao().getAll();
+                    for(Selected i:id){
+                        ids.add(i.getId());
+                    }
+                    deleteBody.setIds(ids);
+                    Call<JsonObject> call= api.deleteMultiple(token,deleteBody);
+                    call.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Toast.makeText(getApplicationContext(),response.toString(),Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(),t.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
     }
 
+    private void dummyData() {
+        emails.add(new Email("Hello","2332","dsd g","fdfd","011","fewfwef"));
+        emails.add(new Email("Hello","dfd","dsggr g","fdfd","02","fewfwef"));
+        emails.add(new Email("Hello","gffgf2332","rgrgr g","fdfd","05","fewfwef"));
+        emails.add(new Email("Hello","fgfgfgfg","vfb g","fdfd","00","fewfwef"));
+        emails.add(new Email("Hello","hghghgh2332","Prvaes g","fdfd","010","fewfwef"));
+        emails.add(new Email("Hello","23etre32","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","fgfgfd","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","fgdgdgdg","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","hjhjh","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","rgsdsd","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","rwqgsdh","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","gdfhtrjuj","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","sfgstrggd","Prvaes g","fdfd","fdf","fewfwef"));
+        emails.add(new Email("Hello","arawrfwr","Prvaes g","fdfd","fdf","fewfwef"));
+    }
+
+    private void sortDate() {
+        Collections.sort(emails, new Comparator<Email>() {
+            @Override
+            public int compare(Email s1, Email s2) {
+                return s1.getTime().compareToIgnoreCase(s2.getTime());
+            }
+        });
+        update();
+        Toast.makeText(getApplicationContext(),"Sorted according to Time",Toast.LENGTH_SHORT).show();
+    }
+
     private void setDefaultListEmail() {
         List<Email> defaultList= DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().emailDao().getAll();
         permCopy.clear();
-        emails.clear();
         permCopy.addAll(defaultList);
         emails.addAll(defaultList);
         update();
@@ -154,6 +242,7 @@ public class EmailInfoActivity extends AppCompatActivity {
             }
         });
         update();
+        Toast.makeText(getApplicationContext(),"Sorted alphabetically",Toast.LENGTH_SHORT).show();
     }
 
     private void init() {
@@ -165,9 +254,53 @@ public class EmailInfoActivity extends AppCompatActivity {
         sort=findViewById(R.id.btnSort);
         noresult=findViewById(R.id.nores);
         txtNoRes=findViewById(R.id.txtNoRes);
+        layTop=findViewById(R.id.layTop);
+        del=findViewById(R.id.btnDelEmail);
 
     }
     private void update(){
+        recyler.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyler, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                Context context=getApplicationContext();
+                List<Selected> ids=DatabaseClient.getInstance(context).getAppDatabase().selectedDao().getAll();
+                Integer x=ids.size();
+                Email email=emails.get(position);
+
+                if(DatabaseClient.getInstance(context).getAppDatabase().selectedDao().get(email.getId()).size()==0){
+                    sharedPreferences.edit().putInt("selectCount",x+1).commit();
+                    view.findViewById(R.id.layoutEmail).setBackgroundColor(Color.parseColor("#E2F0FA"));
+                    view.findViewById(R.id.imgTick).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.iconLetter).setVisibility(View.INVISIBLE);
+                    email.setSelected(true);
+                    DatabaseClient.getInstance(context).getAppDatabase().selectedDao().insert(new Selected(email.getId()));
+                }else{
+                    sharedPreferences.edit().putInt("selectCount",x-1).commit();
+                    view.findViewById(R.id.layoutEmail).setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    view.findViewById(R.id.imgTick).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.iconLetter).setVisibility(View.VISIBLE);
+                    email.setSelected(false);
+                    DatabaseClient.getInstance(context).getAppDatabase().selectedDao().delete(new Selected(email.getId()));
+                }
+
+                if(ids.size()!=0){
+                    toggle=true;
+                    search.setText(ids.size()+"");
+                    del.setVisibility(View.VISIBLE);
+                    layTop.setStartIconDrawable(R.drawable.ic_back_1);
+                }else {toggle=false;
+                    del.setVisibility(View.INVISIBLE);
+                    layTop.setStartIconDrawable(R.drawable.ic_menu);
+                }
+
+
+            }
+        }));
         adapter= new EmailAdapter(emails,getApplication());
         recyler.setHasFixedSize(true);
         recyler.setLayoutManager(layout);

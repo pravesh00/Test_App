@@ -23,8 +23,10 @@ public class Email implements Serializable {
     String time;
     @ColumnInfo(name="name")
     String name;
+    Boolean isSelected;
 
     public Email() {
+        isSelected=false;
     }
 
     public Email(String body, String id, String sender, String subject, String time,String name) {
@@ -34,6 +36,15 @@ public class Email implements Serializable {
         this.subject = subject;
         this.time = time;
         this.name=name;
+        isSelected=false;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
     }
 
     public String getBody() {

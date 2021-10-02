@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,11 +26,14 @@ import com.example.test_app.ProfileActivity;
 import com.example.test_app.R;
 import com.example.test_app.database.DatabaseClient;
 import com.example.test_app.model.Email;
+import com.example.test_app.model.Selected;
 import com.example.test_app.model.UserResponse;
 import com.github.ivbaranov.mli.MaterialLetterIcon;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,6 +43,7 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.EmailViewHol
     Context context;
     Dialog myDialog;
     SharedPreferences sharedPreferences;
+
     public EmailAdapter(ArrayList<Email> emailList, Context context) {
         this.emailList = emailList;
         this.context=context;
@@ -82,12 +87,6 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.EmailViewHol
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Boolean s=sharedPreferences.getBoolean("email",false);
-                Integer x=sharedPreferences.getInt("selectCount",0);
-                if(!s){
-                    holder.layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    holder.img.setVisibility(View.INVISIBLE);
-                    holder.icon.setVisibility(View.VISIBLE);
                 Intent i=new Intent(view.getContext(), EmailActivity.class);
                 i.putExtra("sender",email.getSender());
                 i.putExtra("body",email.getBody());
@@ -95,43 +94,14 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.EmailViewHol
                 i.putExtra("id",email.getId());
 
                 view.getContext().startActivity(i);}
-                else{
-                    if(holder.img.getVisibility()==View.VISIBLE){
-                        holder.layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        holder.img.setVisibility(View.INVISIBLE);
-                        holder.icon.setVisibility(View.VISIBLE);
-                        sharedPreferences.edit().putInt("selectCount",x-1).commit();
-                        if(x==1){
-                            sharedPreferences.edit().putBoolean("email",false).commit();
-                        }
-
-                    }else{
-                    holder.layout.setBackgroundColor(Color.parseColor("#E2F0FA"));
-                    holder.img.setVisibility(View.VISIBLE);
-                    holder.icon.setVisibility(View.INVISIBLE);
-                    sharedPreferences.edit().putInt("selectCount",x+1).commit();}
-
-                }
-
-            }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Integer x=sharedPreferences.getInt("selectCount",0);
-                if(x==0){
-                    sharedPreferences.edit().putBoolean("email",true).commit();
-                }
-                if(holder.img.getVisibility()!=View.VISIBLE){
-                    sharedPreferences.edit().putInt("selectCount",x+1).commit();
-                }
-                holder.layout.setBackgroundColor(Color.parseColor("#E2F0FA"));
-                holder.img.setVisibility(View.VISIBLE);
-                holder.icon.setVisibility(View.INVISIBLE);
-
                 return true;
             }
         });
+
     }
 
     @Override
@@ -154,6 +124,8 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.EmailViewHol
             layout=itemView.findViewById(R.id.layoutEmail);
             img=itemView.findViewById(R.id.imgTick);
 
+
         }
     }
+
 }

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="5sp"
     android:padding="3sp"
     android:id="@+id/layoutEmail"
     android:layout_height="wrap_content"
@@ -14,17 +13,19 @@
         android:id="@+id/iconLetter"
         android:layout_width="50sp"
         android:layout_height="50sp"
-        android:layout_marginTop="15dp"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></com.github.ivbaranov.mli.MaterialLetterIcon>
+
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgTick"
         android:layout_width="50sp"
         android:layout_height="50sp"
-        android:id="@+id/imgTick"
-        android:src="@drawable/img"
+        app:layout_constraintVertical_bias="0.2"
+        android:src="@drawable/ic_done"
         android:visibility="invisible"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
     <ImageView
