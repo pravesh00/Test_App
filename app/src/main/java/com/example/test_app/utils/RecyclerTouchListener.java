@@ -1,4 +1,4 @@
-package com.example.test_app;
+package com.example.test_app.utils;
 
 import android.content.Context;
 import android.view.GestureDetector;

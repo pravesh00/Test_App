@@ -87,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SignUp Instead?"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:lineHeight="12dp"
         android:textColor="#0C6EFA"
         app:layout_constraintBottom_toBottomOf="parent"

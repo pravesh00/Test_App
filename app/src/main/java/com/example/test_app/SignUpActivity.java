@@ -70,6 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
         p.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         p.setIndeterminate(true);
         p.show();
+
         String txtEmail=email.getText().toString();
         String txtPass=password.getText().toString();
         String txtAddress=address.getText().toString();

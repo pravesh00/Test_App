@@ -1,8 +1,6 @@
 package com.example.test_app;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,7 +11,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,6 +24,7 @@ import com.example.test_app.model.AllMailsResponse;
 import com.example.test_app.model.DeleteBody;
 import com.example.test_app.model.Email;
 import com.example.test_app.model.Selected;
+import com.example.test_app.utils.RecyclerTouchListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 
