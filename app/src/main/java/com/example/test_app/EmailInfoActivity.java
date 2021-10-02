@@ -73,7 +73,7 @@ public class EmailInfoActivity extends AppCompatActivity {
 
         api=retrofit.create(ApiInterface.class);
 
-        dummyData();
+       // dummyData();
 
         //Intializing UI
         init();
